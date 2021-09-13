@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace DemoMVC.Controllers
 {
-    [Route("")]
-    [Route("gestao")]
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -20,20 +19,33 @@ namespace DemoMVC.Controllers
             _logger = logger;
         }
 
-        [Route("")]
-        [Route("pagina-inicial")]
-        [Route("pagina-inicial/{id:int}/{categoria:guid}")]
-        public IActionResult Index(int id, Guid categoria)
+        public IActionResult Index()
         {
-            return View();
-        }
+            var filme = new Filme
+            {
+                Titulo = "Oi",
+                DataLancamento = DateTime.Now,
+                Genero = null,
+                Avaliacao = 10,
+                Valor = 20000
 
-        [Route("privacidade")]
-        [Route("politica-de-privacidade")]
-        public IActionResult Privacy()
+            };
+            return RedirectToAction("Privacy", filme);
+            //return View();
+        }
+        public IActionResult Privacy(Filme filme)
         {
-            return Json("{nome:Lucas}");
-            //return Content("QUalquer coisa!");
+            if (ModelState.IsValid)
+            {
+
+            }
+
+            foreach (var error in ModelState.Values.SelectMany(m => m.Errors))
+            {
+                Console.WriteLine(error.ErrorMessage);
+            }
+
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
